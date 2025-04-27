@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: docker.io/ollama/ollama:latest
+    ports:
+      - "11436:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    # Uncomment the following if you want to pre-load the llama3:8b model
+    command: ["ollama", "serve"]
+    entrypoint: |
+      /bin/sh -c "
+      ollama pull llama3.2:3b &&
+      ollama serve
+      "
+
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_HOST=ollama:11434
+    depends_on:
+      - ollama
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - BACKEND_URL=http://backend:8000
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+
+volumes:
+  ollama_data:

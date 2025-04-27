@@ -40,6 +40,7 @@ async def health_check():
 
 @app.post("/upload")
 async def upload_documents(folder_name: str, files: List[UploadFile] = File(...)):
+    logger.info('upload called....')
     try:
         # Create folder if it doesn't exist
         logger.info(f'folder name - {folder_name}')
