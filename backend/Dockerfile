@@ -18,4 +18,4 @@ COPY config.yaml .
 RUN mkdir logs
 
 # The command to run your backend (adjust as needed)
-CMD ["uvicorn", "src.app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.app:app", "--host", "0.0.0.0", "--port", "8000", "--timeout-keep-alive", "15"]

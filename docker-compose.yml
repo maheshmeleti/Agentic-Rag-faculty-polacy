@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   ollama:
-    image: docker.io/ollama/ollama:latest
+    build: ./models
     ports:
       - "11435:11434"  # Map local port 11436 to container port 11434
     volumes:
@@ -14,12 +14,7 @@ services:
       - OLLAMA_HOST=0.0.0.0
     networks:
       - ollama-docker
-    entrypoint: sh -c
-    command: |
-      "ollama pull nomic-embed-text && 
-      ollama pull llama3:3b && 
-      ollama serve"
-
+    command: ["serve"]
 
   backend:
     build: ./backend
