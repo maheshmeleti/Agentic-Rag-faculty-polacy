@@ -1,0 +1,27 @@
+data:
+  input_dir: "./data/raw/clemson_faculty_docs"
+  vector_db_path: "./data/processed/clemson_faculty_docs"
+
+embeddings:
+  model: "nomic-embed-text"
+  chunk_size: 1000
+  chunk_overlap: 300
+  base_url: 'http://localhost:11434'
+
+llm:
+  model: "llama3.2:3b"
+  base_url: 'http://localhost:11434'
+
+retrieval:
+  vector_db: "faiss"
+  top_k: 5
+  similarity_threshold: 0.7
+
+generation:
+  llm: "gpt-3.5-turbo"
+  temperature: 0.7
+  max_tokens: 500
+
+evaluation:
+  test_queries: "./data/eval_queries.json"
+  metrics: ["hit_rate", "mrr", "accuracy"]
