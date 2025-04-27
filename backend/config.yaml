@@ -6,11 +6,13 @@ embeddings:
   model: "nomic-embed-text"
   chunk_size: 1000
   chunk_overlap: 300
-  base_url: 'http://localhost:11434'
+  # base_url: 'http://localhost:11434'
+  base_url: 'http://ollama:11434'
 
 llm:
   model: "llama3.2:3b"
   base_url: 'http://localhost:11434'
+  base_url: 'http://ollama:11434'
 
 retrieval:
   vector_db: "faiss"

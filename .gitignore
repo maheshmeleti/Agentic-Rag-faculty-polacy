@@ -19,6 +19,7 @@ logs/
 # Data files
 data/
 uploaded_docs/
+ollama/
 *.db
 *.sqlite
 

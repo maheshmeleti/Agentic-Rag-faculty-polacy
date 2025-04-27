@@ -12,6 +12,8 @@ from langchain_core.messages import HumanMessage
 app = FastAPI(title="RAG Backend API", description="Backend for Retrieval-Augmented Generation (RAG) system.")
 logger = get_logger("RAGBackend")
 
+os.makedirs("data/raw/clemson_faculty_docs", exist_ok=True)
+os.makedirs("data/processed/clemson_faculty_docs", exist_ok=True)
 
 config = read_yaml('config.yaml')
 

@@ -4,38 +4,53 @@ services:
   ollama:
     image: docker.io/ollama/ollama:latest
     ports:
-      - "11436:11434"
+      - "11435:11434"  # Map local port 11436 to container port 11434
     volumes:
-      - ollama_data:/root/.ollama
-    # Uncomment the following if you want to pre-load the llama3:8b model
-    command: ["ollama", "serve"]
-    entrypoint: |
-      /bin/sh -c "
-      ollama pull llama3.2:3b &&
-      ollama serve
-      "
+      - ./ollama/ollama:/root/.ollama  # Persist Ollama models
+    container_name: ollama
+    restart: always
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_HOST=0.0.0.0
+    networks:
+      - ollama-docker
+    entrypoint: sh -c
+    command: |
+      "ollama pull nomic-embed-text && 
+      ollama pull llama3:3b && 
+      ollama serve"
+
 
   backend:
-    build: .
+    build: ./backend
     ports:
       - "8000:8000"
     environment:
-      - OLLAMA_HOST=ollama:11434
+      - OLLAMA_HOST=http://ollama:11434  # Backend communicates with Ollama via Docker network
+      - PYTHONPATH=/app
     depends_on:
       - ollama
     volumes:
       - ./backend:/app
+    networks:
+      - ollama-docker
 
   frontend:
     build: ./frontend
     ports:
       - "8501:8501"
     environment:
-      - BACKEND_URL=http://backend:8000
+      - BACKEND_URL=http://backend:8000  # Frontend communicates with Backend
     depends_on:
       - backend
     volumes:
       - ./frontend:/app
+    networks:
+      - ollama-docker
 
 volumes:
-  ollama_data:
+  ollama_data:  # Volume for persisting Ollama models
+
+networks:
+  ollama-docker:
+    external: false

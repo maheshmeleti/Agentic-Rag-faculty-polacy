@@ -6,7 +6,8 @@ from typing import List
 # from config import config
 
 # API configuration
-API_BASE_URL = "http://localhost:8000"  # Update with your FastAPI server URL
+#API_BASE_URL = "http://localhost:8000"  # Update with your FastAPI server URL
+API_BASE_URL = "http://backend:8000"
 
 def get_processed_folders() -> List[str]:
     """Fetch available processed folders from the backend"""
