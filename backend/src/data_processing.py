@@ -81,7 +81,7 @@ class DocumentProcessor:
         self.logger.debug("Initializing embeddings...")
         embeddings = OllamaEmbeddings(
             model=self.config["embeddings"]["model"],
-            base_url=self.config["embeddings"].get("base_url", "http://localhost:11434")
+            base_url=self.config["embeddings"].get("base_url", self.config['embeddings']['base_url'])
         )
         self.logger.debug("Embeddings initialized successfully.")
         return embeddings

@@ -3,7 +3,8 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 import os
-from src.agent.react_agent import ReactAgent
+# from src.agent.react_agent import ReactAgent
+from src.agent.self_evaluation_agent import SelfEvaluationAgent
 from src.logger import get_logger
 from utils.common_functions import read_yaml
 from pydantic import BaseModel
@@ -33,8 +34,6 @@ class QueryRequest(BaseModel):
 from src.data_processing import DocumentProcessor
 
 document_processor = DocumentProcessor()
-
-# document_processor.process_and_store(folder_name) #processes the documents in the folder and stores the vectors
 
 @app.get("/health")
 async def health_check():
@@ -76,7 +75,8 @@ async def query_agent(request: QueryRequest):
     logger.info(f'messages - {request.messages[0]["content"]}')
     logger.info(f'folders - {request.folder_names}')
     try:
-        agent = ReactAgent(folders=request.folder_names)
+        agent = SelfEvaluationAgent(folders=request.folder_names)
+        # agent = ReactAgent(folders=request.folder_names)
         graph = agent.build_agent()
 
         query = {"messages": [HumanMessage(request.messages[0]["content"])]}
@@ -87,12 +87,12 @@ async def query_agent(request: QueryRequest):
         response_messages = []
         for output in graph.stream(query):
             for key, value in output.items():
-                if key == "assistant":
+                if key == "generate" or key == 'generate_quiz':
                     for msg in value["messages"]:
                         response_messages.append(msg)
 
         if response_messages:
-            response = response_messages[-1].content
+            response = response_messages[-1]
         else:
             response = "I didn't get a response. Please try again."
         

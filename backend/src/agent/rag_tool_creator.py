@@ -35,7 +35,7 @@ class RAGToolCreator:
             db_path, self.embeddings, allow_dangerous_deserialization=True
         )
         retriever = vector_store.as_retriever(
-            search_type="similarity", search_kwargs={"k": 5}
+            search_type=self.config["retrieval"]["search_type"], search_kwargs={"k": self.config["retrieval"]["top_k"]}
         )
         self.logger.debug("Vector store loaded successfully.")
 

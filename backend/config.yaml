@@ -6,24 +6,18 @@ embeddings:
   model: "nomic-embed-text"
   chunk_size: 1000
   chunk_overlap: 300
-  # base_url: 'http://localhost:11434'
-  base_url: 'http://ollama:11434'
+  base_url: 'http://localhost:11434'
+  # base_url: 'http://ollama:11434'
 
 llm:
   model: "llama3.2:3b"
   base_url: 'http://localhost:11434'
-  base_url: 'http://ollama:11434'
+  # base_url: 'http://ollama:11434'
 
 retrieval:
   vector_db: "faiss"
-  top_k: 5
-  similarity_threshold: 0.7
+  top_k: 6
+  search_type: "similarity"
 
-generation:
-  llm: "gpt-3.5-turbo"
-  temperature: 0.7
-  max_tokens: 500
-
-evaluation:
-  test_queries: "./data/eval_queries.json"
-  metrics: ["hit_rate", "mrr", "accuracy"]
+deployment:
+  type: 'local'

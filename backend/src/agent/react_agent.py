@@ -8,9 +8,10 @@ from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 
 from src.agent.rag_tool_creator import RAGToolCreator
 from src.agent.tool_utils import tool_name, tool_description
-from src.agent.prompts import system_prompt
+from src.agent.react_prompts import system_prompt
 from src.logger import get_logger
 from utils.common_functions import read_yaml
+from src.agent.quiz_generator_tool import QuizGeneratorTool
 
 warnings.filterwarnings("ignore")
 
@@ -26,11 +27,13 @@ class ReactAgent:
         """
         self.logger = get_logger(self.__class__.__name__)
         self.logger.debug("Initializing ReactAgent...")
+        self.config_path = config_path
         self.config = read_yaml(config_path)
         self.llm = self._initialize_llm()
         self.rag_folders = folders
         self.tools = []
         self._initialize_RAG_tools()
+        self._initialize_quiz_tool()  # Add quiz tool
         self.llm_with_tools = self.llm.bind_tools(self.tools)
         self.logger.debug("ReactAgent initialized successfully.")
 
@@ -91,14 +94,23 @@ class ReactAgent:
                     tool_description=tool_description_,
                 )
             )
-            self.logger.info(f"Initialized rag tool from db {db_name}")    
+            self.logger.info(f"Initialized rag tool from db {db_name}")
+
+    def _initialize_quiz_tool(self):
+        """Initialize the quiz generation tool."""
+        self.logger.info("Initializing quiz tool...")
+        quiz_tool = QuizGeneratorTool(config_path=self.config_path)
+        self.tools.append(quiz_tool)
+        self.logger.debug("Quiz tool initialized successfully.")    
 
     
 if __name__ == '__main__':
     from pprint import pprint
     input = "compare polacies of 2018-2019 to 2020-2021 and tell what are the major updates"
+    input = "create a quiz on faculty appointments for regular ranks?"
     query = {"messages": [HumanMessage(input)]}
-    agent = ReactAgent()
+    folders = ['2020-2021']
+    agent = ReactAgent(folders)
     graph = agent.build_agent()
     graph.invoke(query)
     for output in graph.stream(query):

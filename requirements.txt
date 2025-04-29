@@ -12,3 +12,4 @@ langchain-community==0.3.16
 langchain-ollama==0.2.1
 PyMuPDF==1.25.5
 langgraph==0.3.30
+streamlit==1.43.0

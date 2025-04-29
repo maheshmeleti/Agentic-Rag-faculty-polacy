@@ -3,11 +3,13 @@ import streamlit as st
 import requests
 import os
 from typing import List
-# from config import config
+# from utils.common_functions import read_yaml
 
+# config = read_yaml()
 # API configuration
-#API_BASE_URL = "http://localhost:8000"  # Update with your FastAPI server URL
-API_BASE_URL = "http://backend:8000"
+API_BASE_URL = "http://localhost:8000"  # Update with your FastAPI server URL
+# API_BASE_URL = "http://backend:8000"
+
 
 def get_processed_folders() -> List[str]:
     """Fetch available processed folders from the backend"""
