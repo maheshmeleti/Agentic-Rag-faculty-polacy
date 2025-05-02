@@ -16,7 +16,7 @@ cd backend
 ```
 
 ```bash
-export PYTHONPATH=/home/<your-user-name>/rag_assessment2/backend
+export PYTHONPATH=/home/<your-user-name>/Agentic-Rag-faculty-polacy/backend
 ```
 
 ```bash
