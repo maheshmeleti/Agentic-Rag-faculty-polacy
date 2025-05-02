@@ -15,7 +15,7 @@ generate_prompt = PromptTemplate(
 
 quiz_prompt = PromptTemplate(
             template="""
-            Create a 3-5 question multiple choice quiz about clemson university based on the following context \n.
+            Create a 5 question multiple choice quiz about clemson university based on the following context \n.
             {context} \n\n
             Format each ouput like this:
 
